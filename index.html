@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Snake Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="ui-overlay">
+            <div class="score-display">
+                <span>Score: </span><span id="score">0</span>
+            </div>
+            <div class="high-score-display">
+                <span>High Score: </span><span id="high-score">0</span>
+            </div>
+        </div>
+        
+        <canvas id="game-canvas" width="500" height="500"></canvas>
+        
+        <div class="mobile-controls">
+            <div class="control-row">
+                <button class="control-btn" id="up-btn">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" id="left-btn">←</button>
+                <button class="control-btn" id="down-btn">↓</button>
+                <button class="control-btn" id="right-btn">→</button>
+            </div>
+        </div>
+        
+        <div class="game-menu" id="game-menu">
+            <h1>Modern Snake Game</h1>
+            <button id="start-btn" class="menu-btn">Start Game</button>
+            <button id="settings-btn" class="menu-btn">Settings</button>
+        </div>
+        
+        <div class="game-over" id="game-over" style="display: none;">
+            <h2>Game Over</h2>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="menu-btn">Play Again</button>
+            <button id="menu-btn" class="menu-btn">Main Menu</button>
+        </div>
+        
+        <div class="settings-panel" id="settings-panel" style="display: none;">
+            <h3>Settings</h3>
+            <div class="setting-group">
+                <label for="grid-size">Grid Size:</label>
+                <select id="grid-size">
+                    <option value="10">10x10 (Large cells)</option>
+                    <option value="15">15x15</option>
+                    <option value="20">20x20</option>
+                    <option value="25" selected>25x25 (Default)</option>
+                    <option value="30">30x30</option>
+                    <option value="35">35x35 (Small cells)</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="snake-color">Snake Color:</label>
+                <input type="color" id="snake-color" value="#4CAF50">
+            </div>
+            <div class="setting-group">
+                <label for="outline-color">Outline Color:</label>
+                <input type="color" id="outline-color" value="#2E7D32">
+            </div>
+            <div class="setting-group">
+                <label for="outline-width">Outline Width:</label>
+                <input type="range" id="outline-width" min="0" max="5" value="2">
+            </div>
+            <div class="setting-group">
+                <label for="bg-color">Background Color:</label>
+                <input type="color" id="bg-color" value="#1a1a1a">
+            </div>
+            <button id="close-settings" class="menu-btn">Close</button>
+        </div>
+    </div>
+    
+    <script src="js/game.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/collision.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/customization.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/imageUpload.js"></script>
+</body>
+</html>

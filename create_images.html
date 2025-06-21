@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Default Food Images</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <h1>Default Food Images Generator</h1>
+    <button onclick="createImages()">Create and Download Images</button>
+    <div id="preview"></div>
+
+    <script>
+        function adjustColor(color, amount) {
+            const hex = color.replace('#', '');
+            const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
+            const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
+            const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
+            
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        function createImages() {
+            const foods = [
+                { name: 'apple', color: '#ff6b6b' },      // Red apple
+                { name: 'cherry', color: '#dc143c' },     // Dark red cherry  
+                { name: 'banana', color: '#f9ca24' },     // Yellow banana
+                { name: 'orange', color: '#ff9f43' },     // Orange
+                { name: 'grape', color: '#6c5ce7' }       // Purple grape
+            ];
+
+            const zip = new JSZip();
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';
+
+            foods.forEach(food => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = canvas.height = 64;
+                
+                // Clear canvas with transparent background
+                ctx.clearRect(0, 0, 64, 64);
+                
+                // Create gradient for the food item
+                const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 28);
+                gradient.addColorStop(0, food.color);
+                gradient.addColorStop(1, adjustColor(food.color, -60));
+                
+                // Draw main circle
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(32, 32, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add border
+                ctx.strokeStyle = adjustColor(food.color, -80);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Add highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(24, 24, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add smaller highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.beginPath();
+                ctx.arc(20, 20, 4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add to preview
+                const img = document.createElement('img');
+                img.src = canvas.toDataURL('image/png');
+                img.style.width = '64px';
+                img.style.height = '64px';
+                img.style.margin = '10px';
+                img.style.border = '2px solid #333';
+                img.title = food.name;
+                preview.appendChild(img);
+                
+                // Add to zip
+                const base64Data = canvas.toDataURL('image/png').split(',')[1];
+                zip.file(`${food.name}.png`, base64Data, { base64: true });
+            });
+
+            // Download zip file
+            zip.generateAsync({ type: 'blob' }).then(function(content) {
+                saveAs(content, 'default_food_images.zip');
+                alert('Images created and downloaded as default_food_images.zip!\nExtract the zip file and place the PNG files in the images/ folder.');
+            });
+        }
+    </script>
+</body>
+</html>
